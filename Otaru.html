@@ -81,107 +81,50 @@
     margin-bottom: 40px;
   }
 
-  /* ===== Music box dome ===== */
-  .box-wrap{
+  /* ===== treasure map (uploaded image) ===== */
+  .map-wrap{
     position:relative;
-    width: 230px;
-    height: 230px;
-    margin: 0 auto 36px;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 3 / 2;
+    margin: 0 auto 20px;
+    transition: transform 1.1s cubic-bezier(.6,.1,.2,1), opacity 0.9s ease;
   }
-
-  .base{
-    position:absolute;
-    bottom:0; left:50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 46px;
-    border-radius: 10px;
-    background: linear-gradient(180deg, #2a3650, #131a28);
-    border: 1px solid rgba(184,147,90,0.35);
-    box-shadow: 0 18px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-  .base::after{
-    content:"";
-    position:absolute;
-    top:8px; left:50%;
-    transform: translateX(-50%);
-    width: 60px; height: 6px;
-    border-radius: 3px;
-    background: rgba(184,147,90,0.25);
-  }
-
-  .dome{
-    position:absolute;
-    bottom: 40px; left:50%;
-    transform: translateX(-50%);
-    width: 176px;
-    height: 176px;
-    border-radius: 50% 50% 6px 6px / 55% 55% 6px 6px;
-    background:
-      radial-gradient(circle at 35% 25%, rgba(255,255,255,0.10), rgba(255,255,255,0.0) 45%),
-      linear-gradient(160deg, rgba(184,147,90,0.14), rgba(20,26,40,0.35));
-    border: 1px solid rgba(184,147,90,0.5);
-    box-shadow:
-      inset 0 0 30px rgba(184,147,90,0.08),
-      0 0 40px rgba(184,147,90,0.05);
-    backdrop-filter: blur(1px);
-    transition: transform 1.4s cubic-bezier(.6,.1,.2,1), opacity 1.1s ease;
-    transform-origin: 50% 100%;
-  }
-
-  .dome.open{
-    transform: translateX(-50%) translateY(-120px) rotateX(60deg);
+  .map-wrap.open{
+    transform: scale(1.08);
     opacity: 0;
   }
-
-  .gear{
-    position:absolute;
-    border: 2px solid var(--brass);
-    border-radius: 50%;
-    opacity: 0.85;
+  .map-img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(0,0,0,0.5));
   }
-  .gear::before{
-    content:"";
+
+  .map-glow{
     position:absolute;
-    inset: -6px;
+    width: 15%; height: 22%;
+    left: 47%; top: 46%;
+    transform: translate(-50%,-50%);
     border-radius:50%;
-    border: 2px dashed rgba(184,147,90,0.4);
-  }
-  .g1{ width:46px; height:46px; top: 66px; left: 62px; animation: spin 8s linear infinite; }
-  .g2{ width:30px; height:30px; top: 52px; left: 108px; animation: spin 6s linear infinite reverse; }
-  .g3{ width:24px; height:24px; top: 96px; left: 110px; animation: spin 5s linear infinite; }
-  @keyframes spin{ to { transform: rotate(360deg); } }
-
-  .key-hole{
-    position:absolute;
-    bottom: 58px; left:50%;
-    transform: translateX(-50%);
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--navy-deep);
-    box-shadow: 0 0 0 2px rgba(184,147,90,0.6), 0 0 12px rgba(184,147,90,0.5);
-  }
-  .key-hole::after{
-    content:"";
-    position:absolute;
-    top: 10px; left:50%;
-    transform: translateX(-50%);
-    width: 4px; height: 8px;
-    background: var(--navy-deep);
-    box-shadow: 0 0 0 2px rgba(184,147,90,0.6);
-  }
-
-  .glow{
-    position:absolute;
-    inset: -20px;
-    border-radius:50%;
-    background: radial-gradient(circle, rgba(184,147,90,0.25), transparent 70%);
+    background: radial-gradient(circle, rgba(184,80,60,0.55), transparent 70%);
     opacity:0;
-    transition: opacity 1s ease;
+    transition: opacity 0.6s ease;
     pointer-events:none;
+    z-index: 2;
   }
-  .glow.on{ opacity:1; animation: pulse 2.4s ease-in-out infinite; }
-  @keyframes pulse{ 0%,100%{ opacity:0.5; } 50%{ opacity:0.9; } }
+  .map-glow.on{ opacity:1; animation: mapPulse 1.4s ease-in-out infinite; }
+  @keyframes mapPulse{ 0%,100%{ opacity:0.55; transform: translate(-50%,-50%) scale(1); } 50%{ opacity:1; transform: translate(-50%,-50%) scale(1.3); } }
+
+  .map-coord{
+    margin-top: 4px;
+    margin-bottom: 22px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--brass-light);
+    opacity: 0.55;
+  }
 
   /* ===== locked panel ===== */
   .panel{
@@ -539,20 +482,15 @@
 <body>
 
 <div class="stage">
-  <div class="eyebrow">OTARU MUSIC BOX HALL</div>
+  <div class="eyebrow">SOMEWHERE IN OTARU</div>
   <h1>小樽への扉</h1>
   <div class="sub">この扉は、あの日、あの場所でだけ開く</div>
 
-  <div class="box-wrap" id="boxWrap">
-    <div class="glow" id="glow"></div>
-    <div class="dome" id="dome">
-      <div class="gear g1"></div>
-      <div class="gear g2"></div>
-      <div class="gear g3"></div>
-    </div>
-    <div class="key-hole"></div>
-    <div class="base"></div>
+  <div class="map-wrap" id="mapWrap">
+    <img src="tizu.png" alt="小樽の地図" class="map-img">
+    <div class="map-glow" id="glow"></div>
   </div>
+  <div class="map-coord">X : 141　Y : 43</div>
 
   <div id="lockedView">
     <div class="panel">
@@ -564,7 +502,7 @@
         <div class="dot" id="dotLoc"></div>
         <div id="txtLoc">まだ、その場所ではない</div>
       </div>
-      <div class="hint">位置情報の確認が必要です。小樽オルゴール堂に着いたら、下のボタンを押してみてください。</div>
+      <div class="hint">あなたが特定の日付でこの場所に立った時、扉はひとりでに開きます。まずは、そっと下のボタンに触れてみてください。</div>
       <button id="checkBtn">扉を確かめる</button>
     </div>
   </div>
@@ -594,7 +532,7 @@
           <div class="ticket-meta">
             <div>DATE<strong>2026.07.20</strong></div>
             <div>VALID<strong>小樽店限定</strong></div>
-            <div>SEAT<strong>お一人様</strong></div>
+            <div>SEAT<strong>お二人様</strong></div>
           </div>
           <div class="ticket-barcode"></div>
         </div>
@@ -635,7 +573,7 @@
   const dotLoc = document.getElementById('dotLoc');
   const txtDate = document.getElementById('txtDate');
   const txtLoc = document.getElementById('txtLoc');
-  const dome = document.getElementById('dome');
+  const mapWrap = document.getElementById('mapWrap');
   const glow = document.getElementById('glow');
   const lockedView = document.getElementById('lockedView');
   const revealStage = document.getElementById('revealStage');
@@ -669,11 +607,13 @@
 
   function unlock(){
     glow.classList.add('on');
-    dome.classList.add('open');
+    setTimeout(() => {
+      mapWrap.classList.add('open');
+    }, 550);
     setTimeout(() => {
       lockedView.style.display = 'none';
       revealStage.classList.add('show');
-    }, 900);
+    }, 1500);
   }
 
   function reveal(dateOk, locOk){
