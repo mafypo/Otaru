@@ -490,7 +490,7 @@
     <img src="tizu.png" alt="小樽の地図" class="map-img">
     <div class="map-glow" id="glow"></div>
   </div>
-  <div class="map-coord">X : 141　Y : 43</div>
+  <div class="map-coord" id="mapCoord">X : 141　Y : 43</div>
 
   <div id="lockedView">
     <div class="panel">
@@ -532,7 +532,7 @@
           <div class="ticket-meta">
             <div>DATE<strong>2026.07.20</strong></div>
             <div>VALID<strong>小樽店限定</strong></div>
-            <div>SEAT<strong>お二人様</strong></div>
+            <div>SEAT<strong>お一人様</strong></div>
           </div>
           <div class="ticket-barcode"></div>
         </div>
@@ -574,6 +574,7 @@
   const txtDate = document.getElementById('txtDate');
   const txtLoc = document.getElementById('txtLoc');
   const mapWrap = document.getElementById('mapWrap');
+  const mapCoord = document.getElementById('mapCoord');
   const glow = document.getElementById('glow');
   const lockedView = document.getElementById('lockedView');
   const revealStage = document.getElementById('revealStage');
@@ -612,6 +613,8 @@
     }, 550);
     setTimeout(() => {
       lockedView.style.display = 'none';
+      mapWrap.style.display = 'none';
+      mapCoord.style.display = 'none';
       revealStage.classList.add('show');
     }, 1500);
   }
