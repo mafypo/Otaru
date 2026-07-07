@@ -33,7 +33,6 @@
     position:relative;
   }
 
-  /* ambient snow/light particles */
   .particle{
     position:fixed;
     top:-10px;
@@ -82,7 +81,6 @@
     margin-bottom: 40px;
   }
 
-  /* ===== Music box dome ===== */
   .box-wrap{
     position:relative;
     width: 230px;
@@ -135,7 +133,6 @@
     opacity: 0;
   }
 
-  /* gears inside */
   .gear{
     position:absolute;
     border: 2px solid var(--brass);
@@ -185,7 +182,6 @@
   .glow.on{ opacity:1; animation: pulse 2.4s ease-in-out infinite; }
   @keyframes pulse{ 0%,100%{ opacity:0.5; } 50%{ opacity:0.9; } }
 
-  /* ===== message panels ===== */
   .panel{
     background: var(--glass);
     border: 1px solid rgba(184,147,90,0.28);
@@ -236,12 +232,14 @@
     margin-top: 20px;
     box-shadow: 0 8px 18px rgba(184,147,90,0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   button:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(184,147,90,0.35); }
   button:active{ transform: translateY(0px); }
   button:disabled{ opacity:0.5; cursor:default; }
 
-  /* reveal ticket */
   .ticket{
     display:none;
     text-align:center;
@@ -375,11 +373,10 @@
 </div>
 
 <script>
-  // ---- Config ----
-  const TARGET_DATE = new Date("2026-07-08T00:00:00+09:00"); // JST
+  const TARGET_DATE = new Date("2026-07-08T00:00:00+09:00");
   const OTARU_LAT = 43.1907;
   const OTARU_LNG = 141.0016;
-  const RADIUS_M = 3000; // 3km around Otaru Music Box Hall / canal area
+  const RADIUS_M = 3000;
 
   const dotDate = document.getElementById('dotDate');
   const dotLoc = document.getElementById('dotLoc');
@@ -464,14 +461,19 @@
     );
   });
 
-  // initial passive date check (no location prompt on load)
   (function initial(){
     const dateOk = isDateOk();
     dotDate.classList.toggle('ok', dateOk);
     txtDate.textContent = dateOk ? "その日は、もう来ている" : "まだ、その日ではない";
   })();
 
-  // ambient particles
+  (function checkPreview(){
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('preview') === '1'){
+      reveal(true, true);
+    }
+  })();
+
   const stage = document.body;
   for (let i=0;i<26;i++){
     const p = document.createElement('div');
