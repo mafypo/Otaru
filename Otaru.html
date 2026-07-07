@@ -273,6 +273,47 @@
     object-fit: contain;
     background:#000;
   }
+
+  /* full-screen playback overlay */
+  .video-panel.fullscreen{
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    z-index: 9999;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  .video-panel.fullscreen .video-frame{
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .video-panel.fullscreen .video-frame video{
+    height: 100%;
+    max-height: none;
+  }
+  .video-panel.fullscreen .video-caption{
+    position: absolute;
+    bottom: 64px;
+    left: 0; right: 0;
+    z-index: 10000;
+    color: var(--brass-light);
+  }
+  .video-panel.fullscreen .skip-link{
+    position: absolute;
+    bottom: 26px;
+    left: 0; right: 0;
+    z-index: 10000;
+    color: var(--brass-light);
+  }
   .play-btn{
     position:absolute;
     top:50%; left:50%;
@@ -620,6 +661,7 @@
   }
 
   function showTicket(){
+    videoPanel.classList.remove('fullscreen');
     videoPanel.classList.add('hidden');
     ticketView.classList.add('show');
   }
@@ -683,15 +725,31 @@
 
   // video controls
   playVideoBtn.addEventListener('click', () => {
+    videoPanel.classList.add('fullscreen');
     revealVideo.play().then(() => {
       playVideoBtn.style.display = 'none';
       videoCaption.textContent = '';
     }).catch(() => {
-      videoCaption.textContent = '動画を再生できませんでした。スキップして進めます。';
+      // some browsers block audible autoplay even after a tap in edge cases; retry muted
+      revealVideo.muted = true;
+      revealVideo.play().then(() => {
+        playVideoBtn.style.display = 'none';
+        videoCaption.textContent = 'タップして音量をオンにできます';
+      }).catch(() => {
+        videoPanel.classList.remove('fullscreen');
+        videoCaption.textContent = '動画を再生できませんでした。スキップして進めます。';
+      });
     });
   });
 
   revealVideo.addEventListener('ended', showTicket);
+
+  revealVideo.addEventListener('click', () => {
+    if (revealVideo.muted && !revealVideo.paused){
+      revealVideo.muted = false;
+      videoCaption.textContent = '';
+    }
+  });
 
   revealVideo.addEventListener('error', () => {
     videoCaption.textContent = '動画が見つかりません（まだアップロードされていない可能性があります）';
