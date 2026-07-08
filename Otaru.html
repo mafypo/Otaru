@@ -15,6 +15,8 @@
     --ivory: #f4ecd9;
     --canal: #4a6b5c;
     --glass: rgba(244,236,217,0.06);
+    --rose: #e3aca3;
+    --rose-light: #f0c9c0;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html,body{
@@ -310,11 +312,12 @@
     display:flex;
     border-radius: 14px;
     overflow:hidden;
-    background: linear-gradient(155deg, #241d13, #14100a 65%, #0f0b06);
+    background: linear-gradient(155deg, #291c1e, #1a1113 65%, #100b0c);
     box-shadow:
       0 30px 60px rgba(0,0,0,0.55),
-      0 0 0 1px rgba(184,147,90,0.45),
-      inset 0 0 40px rgba(184,147,90,0.05);
+      0 0 0 1px rgba(227,172,163,0.35),
+      0 0 34px rgba(227,172,163,0.08),
+      inset 0 0 40px rgba(184,147,90,0.06);
     isolation: isolate;
     transform-style: preserve-3d;
     transition: transform 0.5s cubic-bezier(.2,.7,.3,1);
@@ -358,17 +361,24 @@
   .ticket-eyebrow{
     font-size: 10.5px;
     letter-spacing: 0.32em;
-    color: var(--brass-light);
-    opacity:0.85;
+    color: var(--rose-light);
+    opacity:0.9;
   }
   .ticket-title{
     font-family:"Shippori Mincho", serif;
-    font-size: clamp(17px, 5.2vw, 23px);
+    font-size: clamp(15px, 4.8vw, 22px);
     font-weight: 700;
     margin: 10px 0 4px;
     color: var(--ivory);
     letter-spacing: 0.02em;
     white-space: nowrap;
+  }
+  .ticket-title .flourish{
+    color: var(--rose);
+    font-size: 0.5em;
+    margin-left: 5px;
+    opacity: 0.85;
+    vertical-align: middle;
   }
   .ticket-sub{
     font-size: 11.5px;
@@ -377,9 +387,14 @@
     margin-bottom: 18px;
   }
   .ticket-divider{
-    width: 100%; height:1px;
+    width: 100%; height:4px;
     margin: 0 0 16px;
-    background: repeating-linear-gradient(90deg, rgba(184,147,90,0.5) 0 6px, transparent 6px 11px);
+    background-image: radial-gradient(circle, var(--rose) 1.1px, transparent 1.5px),
+                       radial-gradient(circle, var(--brass) 0.9px, transparent 1.3px);
+    background-size: 14px 4px, 14px 4px;
+    background-position: 0 0, 7px 0;
+    background-repeat: repeat-x, repeat-x;
+    opacity: 0.65;
   }
   .ticket-meta{
     display:flex;
@@ -390,8 +405,8 @@
   .ticket-meta div{
     font-size: 9.5px;
     letter-spacing: 0.15em;
-    color: var(--brass-light);
-    opacity: 0.55;
+    color: var(--rose-light);
+    opacity: 0.6;
   }
   .ticket-meta strong{
     display:block;
@@ -404,17 +419,14 @@
     font-weight:600;
   }
   .ticket-barcode{
-    height: 26px;
-    background: repeating-linear-gradient(90deg,
-      rgba(244,236,217,0.85) 0px, rgba(244,236,217,0.85) 2px,
-      transparent 2px, transparent 3px,
-      rgba(244,236,217,0.5) 3px, rgba(244,236,217,0.5) 4px,
-      transparent 4px, transparent 6px,
-      rgba(244,236,217,0.85) 6px, rgba(244,236,217,0.85) 9px,
-      transparent 9px, transparent 10px
-    );
-    opacity: 0.35;
-    border-radius: 2px;
+    height: 10px;
+    background-image:
+      radial-gradient(circle, rgba(244,236,217,0.65) 1.1px, transparent 1.5px),
+      radial-gradient(circle, rgba(227,172,163,0.6) 0.8px, transparent 1.2px);
+    background-size: 11px 10px, 11px 10px;
+    background-position: 0 50%, 5.5px 50%;
+    background-repeat: repeat-x, repeat-x;
+    opacity: 0.6;
   }
 
   .ticket-stub{
@@ -423,15 +435,15 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    border-left: 2px dashed rgba(184,147,90,0.4);
+    border-left: 2px dashed rgba(227,172,163,0.4);
   }
   .ticket-stub .stub-text{
     writing-mode: vertical-rl;
     text-orientation: mixed;
     font-size: 11px;
     letter-spacing: 0.3em;
-    color: var(--brass-light);
-    opacity: 0.7;
+    color: var(--rose-light);
+    opacity: 0.75;
   }
   .ticket-notch{
     position:absolute;
@@ -440,6 +452,7 @@
     border-radius: 50%;
     left: -9px;
     z-index: 2;
+    box-shadow: inset 0 0 0 1px rgba(227,172,163,0.35);
   }
   .ticket-notch.top{ top: -9px; }
   .ticket-notch.bottom{ bottom: -9px; }
@@ -513,11 +526,11 @@
     <div class="panel">
       <div class="status-line">
         <div class="dot" id="dotDate"></div>
-        <div id="txtDate">まだ、その日ではない</div>
+        <div id="txtDate">運命の日は、まだ来ていない</div>
       </div>
       <div class="status-line">
         <div class="dot" id="dotLoc"></div>
-        <div id="txtLoc">まだ、その場所ではない</div>
+        <div id="txtLoc">たどり着くべき場所は、まだ遠い</div>
       </div>
       <div class="hint">あなたが特定の日付でこの場所に立った時、扉はひとりでに開きます。まずは、そっと下のボタンに触れてみてください。</div>
       <button id="checkBtn">扉を確かめる</button>
@@ -544,13 +557,13 @@
         <div class="premium-ticket" id="premiumTicket">
         <div class="ticket-main">
           <div class="ticket-eyebrow">OTARU MUSIC BOX HALL</div>
-          <div class="ticket-title">オルゴール プレゼント券</div>
+          <div class="ticket-title">オルゴール プレゼント券<span class="flourish">✦</span></div>
           <div class="ticket-sub">お好きな一台をお選びください</div>
           <div class="ticket-divider"></div>
           <div class="ticket-meta">
             <div>DATE<strong>2026.07.20</strong></div>
             <div>VALID<strong>小樽店限定</strong></div>
-            <div>SEAT<strong>お一人様</strong></div>
+            <div>SEAT<strong>お二人様</strong></div>
           </div>
           <div class="ticket-barcode"></div>
         </div>
@@ -716,8 +729,8 @@
   function reveal(dateOk, locOk, locMessage){
     dotDate.classList.toggle('ok', dateOk);
     dotLoc.classList.toggle('ok', locOk);
-    txtDate.textContent = dateOk ? "その日は、もう来ている" : "まだ、その日ではない";
-    txtLoc.textContent = locMessage || (locOk ? "その場所に、あなたはいる" : "まだ、その場所ではない");
+    txtDate.textContent = dateOk ? "運命の日が、訪れた" : "運命の日は、まだ来ていない";
+    txtLoc.textContent = locMessage || (locOk ? "たどり着くべき場所に、今、立っている" : "たどり着くべき場所は、まだ遠い");
 
     if (dateOk && locOk){
       unlock();
@@ -805,7 +818,7 @@
   (function initial(){
     const dateOk = isDateOk();
     dotDate.classList.toggle('ok', dateOk);
-    txtDate.textContent = dateOk ? "その日は、もう来ている" : "まだ、その日ではない";
+    txtDate.textContent = dateOk ? "運命の日が、訪れた" : "運命の日は、まだ来ていない";
   })();
 
   // preview mode for testing the reveal without waiting for the real date/location
